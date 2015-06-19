@@ -225,17 +225,24 @@ class TuckArmsActionServer:
     l_sum_untucked = 0
     r_sum_tucked = 0
     r_sum_untucked = 0
-    for name_state, name_desi, value_state, value_l_tucked, value_l_untucked, value_r_tucked, value_r_untucked in zip(msg.joint_names, joint_names, msg.actual.positions , l_arm_tucked, l_arm_untucked, r_arm_tucked, r_arm_untucked):
+
+    for name_state, value_state in zip(msg.joint_names, msg.actual.positions):
       value_state = self.angleWrap(value_state)
 
-      if 'l_'+name_desi+'_joint' == name_state:
-        self.l_received = True
-        l_sum_tucked = l_sum_tucked + math.fabs(value_state - value_l_tucked)
-        l_sum_untucked = l_sum_untucked + math.fabs(value_state - value_l_untucked)
-      if 'r_'+name_desi+'_joint' == name_state:
-        self.r_received = True
-        r_sum_tucked = r_sum_tucked + math.fabs(value_state - value_r_tucked)
-        r_sum_untucked = r_sum_untucked + math.fabs(value_state - value_r_untucked)
+      if name_state[2:-6] in joint_names:
+        joint_name_index = joint_names.index(name_state[2:-6])
+        if name_state[0] == 'l':
+          self.l_received = True
+          l_sum_tucked = l_sum_tucked + math.fabs(value_state - l_arm_tucked[joint_name_index])
+          l_sum_untucked = l_sum_untucked + math.fabs(value_state - l_arm_untucked[joint_name_index])
+        if name_state[0] == 'r':
+          self.r_received = True
+          r_sum_tucked = r_sum_tucked + math.fabs(value_state - r_arm_tucked[joint_name_index])
+          r_sum_untucked = r_sum_untucked + math.fabs(value_state - r_arm_untucked[joint_name_index])
+      else:
+        rospy.logerr('got erronious arm_controller/state message')
+        self.l_received = False
+        self.r_recieved = False
 
     if l_sum_tucked > 0 and l_sum_tucked < 0.1:
       self.l_arm_state = 0
