@@ -26,4 +26,4 @@ include_directories(
 
 install(PROGRAMS scripts/tuck_arms.py src/pr2_tuck_arms_action/tuck_arms_main.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-install(DIRECTORY test/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(PROGRAMS test/tuck_arms_test.py DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

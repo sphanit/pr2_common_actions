@@ -113,7 +113,7 @@ class TuckArmsActionServer:
 	    rospy.logerr("pr2_tuck_arms: right_joint_client action server did not come up within timelimit")
 
     # Construct action server
-    self.action_server = actionlib.simple_action_server.SimpleActionServer(node_name,TuckArmsAction, self.executeCB)
+    self.action_server = actionlib.simple_action_server.SimpleActionServer(node_name,TuckArmsAction, self.executeCB, False)
 
 
   def executeCB(self, goal):
@@ -264,6 +264,7 @@ def main():
   rospy.init_node(action_name)
   rospy.sleep(0.001)  # wait for time
   tuck_arms_action_server = TuckArmsActionServer(action_name)
+  tuck_arms_action_server.action_server.start()
 
   rospy.spin()
 
