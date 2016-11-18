@@ -107,9 +107,9 @@ class TuckArmsActionServer:
     rospy.Subscriber('r_arm_controller/state', JointTrajectoryControllerState ,self.stateCb)
 
     # Wait for joint clients to connect with timeout
-    if not self.left_joint_client.wait_for_server(rospy.Duration(30)):
+    if not self.left_joint_client.wait_for_server(rospy.Duration(90)):
 	    rospy.logerr("pr2_tuck_arms: left_joint_client action server did not come up within timelimit")
-    if not self.right_joint_client.wait_for_server(rospy.Duration(30)):
+    if not self.right_joint_client.wait_for_server(rospy.Duration(90)):
 	    rospy.logerr("pr2_tuck_arms: right_joint_client action server did not come up within timelimit")
 
     # Construct action server
